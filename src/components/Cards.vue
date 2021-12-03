@@ -1,9 +1,9 @@
 <template>
   <h1>{{ msg }}</h1>
-  <CardDisplay :card=card />
+  <p>Cards on deck: {{ count }}</p>
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
-  <p>Cards on deck: {{ count }}</p>
+  <CardDisplay :card=card />
 </template>
 
 <script>
