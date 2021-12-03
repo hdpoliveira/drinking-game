@@ -20,7 +20,6 @@ function deck() {
   const values = [...Array.from(Array(9).keys(), (v) => v + 2), 'A', 'J', 'Q', 'K'];
   const suits = ['♠', '♥', '♦', '♣'];
   const cards = suits.flatMap((suit) => values.map((value) => { return {value, suit}; }));
-  console.log(cards);
   return shuffled(cards);
 }
 
