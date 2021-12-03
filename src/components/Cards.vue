@@ -34,7 +34,8 @@ export default {
   setup() {
     let cards = deck();
     const count = ref(cards.length);
-    const card = ref("");
+    const nullCard = {value:'', suit: ''}
+    const card = ref(nullCard);
     const nextCard = (evt) => {
       count.value--;
       card.value = cards[count.value];
@@ -43,7 +44,7 @@ export default {
     const reshuffle = (evt) => {
       cards = deck();
       count.value = cards.length
-      card.value = "";
+      card.value = nullCard;
     };
 
     return {
