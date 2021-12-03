@@ -1,12 +1,14 @@
 <template>
   <h1>{{ msg }}</h1>
-  <div class="card"><p>{{ card }}</p></div>
+  <CardDisplay :card=card />
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
   <p>Cards on deck: {{ count }}</p>
 </template>
 
 <script>
+import CardDisplay from './CardDisplay.vue'
+
 import { ref } from "vue";
 
 const shuffled = (unshuffled) => unshuffled
@@ -17,13 +19,16 @@ const shuffled = (unshuffled) => unshuffled
 function deck() {
   const values = [...Array.from(Array(9).keys(), (v) => v + 2), 'A', 'J', 'Q', 'K'];
   const suits = ['♠', '♥', '♦', '♣'];
-  const cards = suits.flatMap((suit) => values.map((value) => value + suit));
+  const cards = suits.flatMap((suit) => values.map((value) => { return {value, suit}; }));
   console.log(cards);
   return shuffled(cards);
 }
 
 export default {
   name: "Cards",
+  components: {
+    CardDisplay
+  },
   props: {
     msg: String,
   },
