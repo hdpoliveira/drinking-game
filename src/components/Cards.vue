@@ -14,12 +14,12 @@ import { rules, kings, sueca } from "../game";
 import { ref, computed } from "vue";
 
 const nullCard = { value: "", suit: "" };
-const nullCardDescirption = { short: "", long: "" };
+const nullCardDescription = { short: "", long: "" };
 
 function getDescription(game, { value, suit }) {
   return value
     ? rules.find((e) => e.short == game[value])
-    : nullCardDescirption;
+    : nullCardDescription;
 }
 
 function getCard(cards, index) {
