@@ -94,6 +94,14 @@ const sueca = {
     K: "Homens bebem",
 };
 
+const nullCardDescription = { short: "", long: "" };
+
+function getRule(game, { value, suit }) {
+  return value
+    ? rules.find((e) => e.short == game[value])
+    : nullCardDescription;
+}
+
 export {
-    rules, kings, sueca,
+    getRule, kings, sueca,
 };

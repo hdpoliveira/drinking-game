@@ -9,18 +9,11 @@
 <script>
 import CardDisplay from "./CardDisplay.vue";
 
-import { rules, kings, sueca } from "../game";
+import { getRule, sueca } from "../game";
 
 import { ref, computed } from "vue";
 
 const nullCard = { value: "", suit: "" };
-const nullCardDescription = { short: "", long: "" };
-
-function getDescription(game, { value, suit }) {
-  return value
-    ? rules.find((e) => e.short == game[value])
-    : nullCardDescription;
-}
 
 function getCard(cards, index) {
   return index < cards.length ? cards[index] : nullCard;
@@ -63,7 +56,7 @@ export default {
     const game = ref(sueca);
     const card = computed(() => getCard(cards, count.value));
     const cardDescription = computed(() =>
-      getDescription(game.value, getCard(cards, count.value))
+      getRule(game.value, getCard(cards, count.value))
     );
     const nextCard = (evt) => {
       count.value--;
