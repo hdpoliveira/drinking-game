@@ -3,13 +3,26 @@
   <p>Cards on deck: {{ count }}</p>
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
-  <CardDisplay :card=card />
+  <CardDisplay :card=card :description=cardDescription />
 </template>
 
 <script>
 import CardDisplay from './CardDisplay.vue'
 
-import { ref } from "vue";
+import { rules, kings, sueca, } from "../game";
+
+import { ref, computed } from "vue";
+
+const nullCard = {value:'', suit: ''}
+const nullCardDescirption = { short: "", long: "" };
+
+function getDescription(game, { value, suit }) {
+  return value ? rules.find((e) => e.short == game[value]) : nullCardDescirption;
+}
+
+function getCard(cards, index) {
+  return index < cards.length ? cards[index] : nullCard;
+}
 
 const shuffled = (unshuffled) => unshuffled
   .map((value) => ({ value, weight: Math.random() }))
@@ -34,22 +47,22 @@ export default {
   setup() {
     let cards = deck();
     const count = ref(cards.length);
-    const nullCard = {value:'', suit: ''}
-    const card = ref(nullCard);
+    const game = ref(sueca);
+    const card = computed(() => getCard(cards, count.value));
+    const cardDescription = computed(() => getDescription(game.value, getCard(cards, count.value)));
     const nextCard = (evt) => {
       count.value--;
-      card.value = cards[count.value];
     }
 
     const reshuffle = (evt) => {
       cards = deck();
       count.value = cards.length
-      card.value = nullCard;
     };
 
     return {
       count,
       card,
+      cardDescription,
       reshuffle,
       nextCard,
     };

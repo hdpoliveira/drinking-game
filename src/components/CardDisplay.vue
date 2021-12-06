@@ -10,25 +10,21 @@
 
 <script>
 import { computed } from "vue";
-import { rules, kings, sueca, } from "../game";
 
-function getDescription(game, { value, suit }) {
-  return value ? rules.find((e) => e.short == game[value]) : { short: "", long: "" };
+function suitColor(suit) {
+  return ["♠", "♣"].includes(suit) ? "black" : "red";
 }
 
 export default {
   name: "CardDisplay",
   props: {
     card: Object,
+    description: Object,
   },
   setup(props, context) {
-    const game = sueca;
-    const suitColor = (suit) => (["♠", "♣"].includes(suit) ? "black" : "red");
     const redOrBlack = computed(() => suitColor(props.card.suit));
-    const description = computed(() => getDescription(game, props.card));
     return {
       redOrBlack,
-      description,
     };
   },
 };
