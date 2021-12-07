@@ -5,6 +5,7 @@
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
   <div id="current-rules">
+    <h1>Current rules</h1>
     <ul id="current-rules-list">
       <li v-for="item in ruleset" :key="item.value">
         {{ item.value }}: {{ item.rule }}
@@ -12,7 +13,7 @@
     </ul>
   </div>
   <div id="all-rules">
-    <p>All rules:</p>
+    <h1>All rules</h1>
     <ul id="all-rules-list">
       <li v-for="item in rules" :key="item">
         {{ item }}
@@ -24,7 +25,7 @@
 <script>
 import CardDisplay from "./CardDisplay.vue";
 
-import { allRules, getRuleFromCard, getRuleDescription } from "../game";
+import { allRules, getRuleFromCard, getRuleDescription, sueca } from "../game";
 
 import { ref, computed } from "vue";
 
@@ -58,6 +59,10 @@ function deck() {
   return shuffled(cards);
 }
 
+function setRuleForValue(currentRuleSet, value, rule) {
+  currentRuleSet[value] = rule;
+}
+
 export default {
   name: "Cards",
   components: {
@@ -68,13 +73,15 @@ export default {
   },
   setup() {
     let cards = deck();
+
+    const currentRuleSet = ref(sueca);
     const count = ref(cards.length);
     const card = computed(() => getCard(cards, count.value));
     const cardDescription = computed(() =>
-      getRuleDescription(getRuleFromCard(getCard(cards, count.value)))
+      getRuleDescription(getRuleFromCard(currentRuleSet.value, getCard(cards, count.value)))
     );
     const ruleset = values.map((x) => {
-      return { value: x, rule: getRuleFromCard({ value: x, suit: "" }) };
+      return { value: x, rule: getRuleFromCard(currentRuleSet.value, { value: x, suit: "" }) };
     });
     const nextCard = (evt) => {
       count.value--;

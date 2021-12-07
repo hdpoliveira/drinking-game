@@ -50,10 +50,7 @@ const sueca = {
 
 const nullCardDescription = { short: "", long: "" };
 
-let currentRuleSet = {};
-Object.assign(currentRuleSet, sueca);
-
-function getRuleFromCard({ value, suit }) {
+function getRuleFromCard(currentRuleSet, { value, suit }) {
     if (!value)
         return "";
     const rule = currentRuleSet[value];
@@ -75,17 +72,13 @@ function getRuleDescription(rule) {
     return desc;
 }
 
-function setRuleForValue(value, rule) {
-    currentRuleSet[value] = rule;
-}
-
 const allRules = () => ruleDescriptions.map(x => x.short);
 
 export {
     allRules,
     getRuleFromCard,
     getRuleDescription,
-    setRuleForValue,
+    sueca,
 };
 
 
