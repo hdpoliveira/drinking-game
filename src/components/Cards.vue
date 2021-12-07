@@ -11,12 +11,20 @@
       </li>
     </ul>
   </div>
+  <div id="all-rules">
+    <p>All rules:</p>
+    <ul id="all-rules-list">
+      <li v-for="item in rules" :key="item">
+        {{ item }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import CardDisplay from "./CardDisplay.vue";
 
-import { getRuleFromCard, getRuleDescription } from "../game";
+import { allRules, getRuleFromCard, getRuleDescription } from "../game";
 
 import { ref, computed } from "vue";
 
@@ -77,10 +85,13 @@ export default {
       count.value = cards.length;
     };
 
+    const rules = allRules();
+
     return {
       count,
       card,
       ruleset,
+      rules,
       cardDescription,
       reshuffle,
       nextCard,
