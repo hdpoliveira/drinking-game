@@ -7,7 +7,9 @@
   <div id="edit-current-rules">
     <h1>Edit current rules</h1>
     <p>Change: {{ pickedCurrentRule }} to {{ pickedRule }}</p>
-    <button @click="changeRule" :disabled="!pickedCurrentRule || !pickedRule">Change rule</button>
+    <button @click="changeRule" :disabled="!pickedCurrentRule || !pickedRule">
+      Change rule
+    </button>
 
     <div id="current-rules-radiobutton">
       <h2>Chose rule to be changed</h2>
@@ -90,12 +92,14 @@ export default {
         getRuleFromCard(currentRuleSet.value, getCard(cards, count.value))
       )
     );
-    const ruleset = values.map((x) => {
-      return {
-        value: x,
-        rule: getRuleFromCard(currentRuleSet.value, { value: x, suit: "" }),
-      };
-    });
+    const ruleset = computed(() =>
+      values.map((x) => {
+        return {
+          value: x,
+          rule: getRuleFromCard(currentRuleSet.value, { value: x, suit: "" }),
+        };
+      })
+    );
     const nextCard = (evt) => {
       count.value--;
     };
