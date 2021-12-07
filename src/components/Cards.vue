@@ -4,21 +4,33 @@
   <p>Cards on deck: {{ count }}</p>
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
-  <div id="current-rules">
-    <h1>Current rules</h1>
-    <ul id="current-rules-list">
-      <li v-for="item in ruleset" :key="item.value">
-        {{ item.value }}: {{ item.rule }}
-      </li>
-    </ul>
-  </div>
-  <div id="all-rules">
-    <h1>All rules</h1>
-    <ul id="all-rules-list">
-      <li v-for="item in rules" :key="item">
-        {{ item }}
-      </li>
-    </ul>
+  <div id="edit-current-rules">
+    <h1>Edit current rules</h1>
+    <p>Change: {{ pickedCurrentRule }} to {{ pickedRule }}</p>
+    <button @click="changeRule" :disabled="!pickedCurrentRule || !pickedRule">Change rule</button>
+
+    <div id="current-rules-radiobutton">
+      <h2>Chose rule to be changed</h2>
+      <div v-for="item in ruleset" :key="item.value">
+        <input
+          type="radio"
+          :id="item.value"
+          :value="item.value"
+          v-model="pickedCurrentRule"
+        />
+        <label :for="item.value">{{ item.value }}: {{ item.rule }}</label>
+        <br />
+      </div>
+    </div>
+
+    <div id="rules-radiobutton">
+      <h2>Choose rule to replace it</h2>
+      <div v-for="item in rules" :key="item">
+        <input type="radio" :id="item" :value="item" v-model="pickedRule" />
+        <label :for="item">{{ item }}</label>
+        <br />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -59,10 +71,6 @@ function deck() {
   return shuffled(cards);
 }
 
-function setRuleForValue(currentRuleSet, value, rule) {
-  currentRuleSet[value] = rule;
-}
-
 export default {
   name: "Cards",
   components: {
@@ -78,10 +86,15 @@ export default {
     const count = ref(cards.length);
     const card = computed(() => getCard(cards, count.value));
     const cardDescription = computed(() =>
-      getRuleDescription(getRuleFromCard(currentRuleSet.value, getCard(cards, count.value)))
+      getRuleDescription(
+        getRuleFromCard(currentRuleSet.value, getCard(cards, count.value))
+      )
     );
     const ruleset = values.map((x) => {
-      return { value: x, rule: getRuleFromCard(currentRuleSet.value, { value: x, suit: "" }) };
+      return {
+        value: x,
+        rule: getRuleFromCard(currentRuleSet.value, { value: x, suit: "" }),
+      };
     });
     const nextCard = (evt) => {
       count.value--;
@@ -94,6 +107,12 @@ export default {
 
     const rules = allRules();
 
+    const pickedCurrentRule = ref("");
+    const pickedRule = ref("");
+    const changeRule = (evt) => {
+      currentRuleSet.value[pickedCurrentRule.value] = pickedRule.value;
+    };
+
     return {
       count,
       card,
@@ -102,6 +121,9 @@ export default {
       cardDescription,
       reshuffle,
       nextCard,
+      pickedRule,
+      pickedCurrentRule,
+      changeRule,
     };
   },
 };
