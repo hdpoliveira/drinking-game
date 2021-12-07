@@ -9,7 +9,7 @@
 <script>
 import CardDisplay from "./CardDisplay.vue";
 
-import { getRule, sueca } from "../game";
+import { getRuleFromCard, getRuleDescription } from "../game";
 
 import { ref, computed } from "vue";
 
@@ -25,14 +25,15 @@ const shuffled = (unshuffled) =>
     .sort((a, b) => a.weight - b.weight)
     .map(({ value }) => value);
 
+const values = [
+  "A",
+  ...Array.from(Array(9).keys(), (v) => v + 2),
+  "J",
+  "Q",
+  "K",
+];
+
 function deck() {
-  const values = [
-    ...Array.from(Array(9).keys(), (v) => v + 2),
-    "A",
-    "J",
-    "Q",
-    "K",
-  ];
   const suits = ["♠", "♥", "♦", "♣"];
   const cards = suits.flatMap((suit) =>
     values.map((value) => {
@@ -53,10 +54,9 @@ export default {
   setup() {
     let cards = deck();
     const count = ref(cards.length);
-    const game = ref(sueca);
     const card = computed(() => getCard(cards, count.value));
     const cardDescription = computed(() =>
-      getRule(game.value, getCard(cards, count.value))
+      getRuleDescription(getRuleFromCard(getCard(cards, count.value)))
     );
     const nextCard = (evt) => {
       count.value--;
