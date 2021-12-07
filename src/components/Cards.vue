@@ -4,6 +4,13 @@
   <p>Cards on deck: {{ count }}</p>
   <button @click="nextCard" :disabled="count == 0">Next card</button>
   <button @click="reshuffle">Reshuffle</button>
+  <div id="current-rules">
+    <ul id="current-rules-list">
+      <li v-for="item in ruleset" :key="item.value">
+        {{ item.value }}: {{ item.rule }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -58,6 +65,9 @@ export default {
     const cardDescription = computed(() =>
       getRuleDescription(getRuleFromCard(getCard(cards, count.value)))
     );
+    const ruleset = values.map((x) => {
+      return { value: x, rule: getRuleFromCard({ value: x, suit: "" }) };
+    });
     const nextCard = (evt) => {
       count.value--;
     };
@@ -70,6 +80,7 @@ export default {
     return {
       count,
       card,
+      ruleset,
       cardDescription,
       reshuffle,
       nextCard,
